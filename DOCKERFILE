@@ -1,0 +1,33 @@
+# Use a Lua-compatible base image
+FROM ubuntu:20.04
+
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    lua5.2 \
+    liblua5.2-dev \
+    libreadline-dev \
+    libconfig-dev \
+    libssl-dev \
+    libevent-dev \
+    make \
+    git \
+    redis-server \
+    g++ \
+    libjansson-dev \
+    libpython-dev \
+    libexpat1-dev
+
+# Clone the repository
+WORKDIR /app
+RUN git clone https://github.com/Dineshv3012/Fflivebot.git .
+# Or copy local files if you’ve modified them
+# COPY . .
+
+# Install additional dependencies (if required)
+RUN if [ -f install.sh ]; then chmod +x install.sh && ./install.sh; fi
+
+# Set environment variables
+ENV BOT_TOKEN=your_bot_token_here
+
+# Start the bot
+CMD ["lua", "bot.lua"]
